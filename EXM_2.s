@@ -1,0 +1,28 @@
+DATA SEGMENT 
+    DAT1 DB 2EH,12H,2EH,56H,2EH,93H,12H,94H,56H,99H,93H,12H,94H,56H,99H,93H,12H,94H,56H,99H
+    DAT2 DB LENGTH DAT1 DUP(0)
+DATA ENDS
+
+CODE SEGMENT 
+    ASSUME CS:CODE, DS:DATA, ES:DATA
+START:  MOV AX, DATA
+        MOV DS, AX
+        MOV ES, AX
+        LEA SI, DAT1
+        LEA DI, DAT2
+        MOV CX, 20
+        XOR DX, DX 
+LOOP1:  LODSB
+        CMP AL, 2EH
+        JE ALT
+        STOSB
+        LOOP LOOP1
+        HLT
+ALT:    MOV AL, ' ' 
+        STOSB
+        INC DL
+        LOOP LOOP1
+        HLT
+CODE ENDS
+
+        END START
