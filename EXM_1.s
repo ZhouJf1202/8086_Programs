@@ -1,0 +1,37 @@
+DATA SEGMENT 
+DA DB 93H,12H,94H,56H,99H,'$'
+DA1 DB 6 DUP(0)
+DA2 DB 6 DUP(0)
+DATA ENDS
+
+CODE SEGMENT 
+    ASSUME CD:CODE, DS:DATA, ES:DATA
+
+START: MOV AX, DATA
+       MOV DS, AX
+       MOV ES, AX
+       LEA SI, DA
+       LEA DI, DA1
+       INC DI
+       LEA BX, DA2
+       INC BX
+       XOR DX, DX ; DH STORES THE NUMBER OF POSITIVES, DL STORES THE NEGETIVES
+LOOP1: LODSB
+       CMP AL, '$'
+       JZ FINISH
+       TEST AL, 80H
+       JNZ NEGT
+       MOV [DI], AL
+       INC DI
+       INC DH 
+       JMP LOOP1
+NEGT:  MOV [BX], AL
+       INC BX
+       INC DL
+       JMP LOOP1
+FINISH: MOV [DA1], DH
+        MOV [DA2], DL
+        HLT
+CODE ENDS
+
+        END START
