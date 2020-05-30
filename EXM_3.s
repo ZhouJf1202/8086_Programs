@@ -1,0 +1,30 @@
+DATA SEGMENT
+    VAR1 DW 5F81H
+    VAR2 DW 0
+DATA ENDS
+
+CODE SEGMENT 
+    ASSUME CS:CODE, DS:DATA, ES:DATA
+START:  MOV AX, DATA
+        MOV DS, AX
+        MOV ES, AX
+        LEA SI, VAR1
+        LEA DI, VAR2
+        MOV CX, 16
+        LODSB
+        MOV AH, AL
+        LODSB
+        NOT AX
+        XCHG AH, AL
+        MOV VAR1, AX
+LOOP1:  ROL AX, 1
+        JNC LABEL
+        LOOP LOOP1
+        HLT
+LABEL:  INC VAR2
+        MOV DX, VAR2  ;TO SHOW THE RESULT VIA DX
+        LOOP LOOP1
+        HLT
+CODE ENDS 
+
+        END START
