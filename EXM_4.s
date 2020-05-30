@@ -1,0 +1,34 @@
+DATA SEGMENT 
+    DAT1 DB  93H,12H,0C1H,56H,89H,83H,82H,93H,76H,99H,93H,78H,93H,86H,99H
+    MAX DB -126        ; INIT BY THE MIN EVEN NUMBER
+    MIN DB 127        ; INIT BY THE MAX ODD NUMBER
+DATA ENDS
+
+CODE SEGMENT 
+    ASSUME CS:CODE, DS:DATA, ES:DATA
+START:  MOV AX, DATA
+        MOV DS, AX
+        MOV ES, AX
+        LEA SI, DAT1
+        MOV CX, 15
+LOOP1:  LODSB
+        TEST AL, 01H
+        JZ EVEN
+        JNZ ODD
+EVEN:   CMP AL, MAX
+        JG MAXE
+        LOOP LOOP1
+        HLT
+ODD:    CMP AL, MIN
+        JL MINO
+        LOOP LOOP1
+        HLT
+MAXE:   MOV MAX, AL
+        LOOP LOOP1
+        HLT
+MINO:   MOV MIN, AL
+        LOOP LOOP1
+        HLT
+CODE ENDS 
+
+           END START
